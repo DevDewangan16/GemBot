@@ -21,3 +21,8 @@ data class GeminiResponse(
 data class Candidate(
     @SerializedName("content") val content: Content?
 )
+
+data class ChatMessage(
+    val text: String,
+    val isQuestion: Boolean
+)

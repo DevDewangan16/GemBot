@@ -3,6 +3,7 @@ package com.example.gembot.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gembot.ui.data.ChatMessage
 import com.example.gembot.ui.data.Content
 import com.example.gembot.ui.data.GeminiRequest
 import com.example.gembot.ui.data.Part
@@ -10,34 +11,35 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class GemViewModel(application: Application):AndroidViewModel(application) {
+class GemViewModel(application: Application): AndroidViewModel(application) {
     private val apiKey = "AIzaSyCenrXarZ6Ar04IQC-KCi45wmS267gUTpo"
 
-    private val _response = MutableStateFlow("Ask something...")
-    val response = _response.asStateFlow()
+    private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
+    val chatHistory = _chatHistory.asStateFlow()
 
     fun fetchResponse(prompt: String) {
         viewModelScope.launch {
             try {
+                // Add the user's question to the chat history
+                _chatHistory.value += ChatMessage(text = prompt, isQuestion = true)
+
                 val request = GeminiRequest(
                     contents = listOf(
-                        Content(parts = listOf(Part(text = prompt)))  // ✅ Correct format
+                        Content(parts = listOf(Part(text = prompt)))
                     )
                 )
 
                 val result = RetrofitClient.instance.getGeminiResponse(apiKey, request)
 
-                // ✅ Correctly extracting response text
+                // Extract the response text
                 val responseText = result.candidates?.getOrNull(0)?.content?.parts?.getOrNull(0)?.text ?: "No response"
 
-                _response.value = responseText
-
-//                val newEntry = RequestResponse(prompt,responseText)
-//                _historyList.value = _historyList.value + newEntry
-
+                // Add the response to the chat history
+                _chatHistory.value += ChatMessage(text = responseText, isQuestion = false)
 
             } catch (e: Exception) {
-                _response.value = "Error: ${e.message}"
+                // Add the error message to the chat history
+                _chatHistory.value += ChatMessage(text = "Error: ${e.message}", isQuestion = false)
             }
         }
     }
