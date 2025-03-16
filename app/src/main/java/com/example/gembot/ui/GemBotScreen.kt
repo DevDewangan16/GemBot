@@ -120,6 +120,7 @@ fun GemBotScreen(gemViewModel: GemViewModel) {
                 }
             }
         )
+        Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
     }
 }
 @Composable
