@@ -83,4 +83,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")  // For JSON Parsing
     implementation("com.github.bumptech.glide:glide:4.15.1") // For Image Loading
     implementation("com.google.android.gms:play-services-basement:18.5.0")
+
+    implementation("io.noties.markwon:core:4.6.2")
+
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class GemViewModel(application: Application):AndroidViewModel(application) {
-    private val apiKey = "AIzaSyDbGhLvg47UU1tY7O0LS7dbeho1dFEuvPk"
+    private val apiKey = "AIzaSyCenrXarZ6Ar04IQC-KCi45wmS267gUTpo"
 
     private val _response = MutableStateFlow("Ask something...")
     val response = _response.asStateFlow()

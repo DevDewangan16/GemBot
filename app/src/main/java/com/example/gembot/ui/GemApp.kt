@@ -5,5 +5,5 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun GemApp(gemViewModel: GemViewModel= viewModel()){
-
+    GemBotScreen(gemViewModel = gemViewModel)
 }
