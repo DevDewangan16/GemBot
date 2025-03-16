@@ -60,6 +60,7 @@ fun GemBotScreen(gemViewModel: GemViewModel) {
             .padding(10.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+        Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
         // Chat History
         Box(
             modifier = Modifier
