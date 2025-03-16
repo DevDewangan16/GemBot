@@ -3,6 +3,7 @@ package com.example.gembot.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gembot.BuildConfig
 import com.example.gembot.ui.data.ChatMessage
 import com.example.gembot.ui.data.Content
 import com.example.gembot.ui.data.GeminiRequest
@@ -10,9 +11,12 @@ import com.example.gembot.ui.data.Part
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
+import java.util.Properties
 
 class GemViewModel(application: Application): AndroidViewModel(application) {
-    private val apiKey = "AIzaSyCenrXarZ6Ar04IQC-KCi45wmS267gUTpo"
+
+    private val apiKey = BuildConfig.GEMINI_API_KEY
 
     private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
     val chatHistory = _chatHistory.asStateFlow()
