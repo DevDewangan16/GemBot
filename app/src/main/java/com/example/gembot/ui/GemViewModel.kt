@@ -1,16 +1,24 @@
 package com.example.gembot.ui
 
 import android.app.Application
+import android.graphics.Bitmap
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gembot.BuildConfig
 import com.example.gembot.ui.data.ChatMessage
 import com.example.gembot.ui.data.Content
+import com.example.gembot.ui.data.Content1
+import com.example.gembot.ui.data.GeminiImageRequest
 import com.example.gembot.ui.data.GeminiRequest
+import com.example.gembot.ui.data.InlineData
 import com.example.gembot.ui.data.Part
+import com.example.gembot.ui.data.Part1
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Properties
 
@@ -47,4 +55,41 @@ class GemViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
+
+    var extractedText = mutableStateOf("No response yet")
+
+    //used to fetch response with the help of Gemini of the Image to Text based
+    fun processImage(bitmap: Bitmap, apiKey: String) {
+        val base64Image = ImageUtils.convertBitmapToBase64(bitmap)
+
+        val request = GeminiImageRequest(
+            contents = listOf(
+                Content1(
+                    parts = listOf(
+                        Part1(
+                            inlineData = InlineData(
+                                mimeType = "image/png",
+                                data = base64Image
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    RetrofitClient1.instance.processImage(apiKey, request)
+                }
+
+                extractedText.value = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
+                    ?: "No text extracted"
+
+            } catch (e: Exception) {
+                extractedText.value = "Error: ${e.message}"
+            }
+        }
+    }
+
 }
