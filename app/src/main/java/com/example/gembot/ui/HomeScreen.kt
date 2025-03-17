@@ -1,6 +1,7 @@
 package com.example.gembot.ui
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -95,13 +96,34 @@ fun HomeScreen(navHostController: NavHostController){
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp),
         )
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(20.dp))
         Row(modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
-            Card (modifier = Modifier.size(150.dp)){
-                Text(text = "Start Text Chat")
+            Card (modifier = Modifier
+                .size(150.dp)
+                .clickable {
+                    navHostController.navigate(GemAPPScreen.Text.name)
+                }){
+                Column(modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Start Text Chat",
+                        fontWeight = FontWeight.Bold)
+                }
             }
-            Card (modifier = Modifier.size(150.dp)){
-                Text(text = "Start Image Chat")
+            Card (modifier = Modifier
+                .size(150.dp)
+                .clickable {
+                    navHostController.navigate(GemAPPScreen.Image.name)
+                }){
+                Column(modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Start Image Chat",
+                        fontWeight = FontWeight.Bold)
+                }
             }
         }
     }

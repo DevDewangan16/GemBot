@@ -21,6 +21,8 @@ fun GemApp(gemViewModel: GemViewModel= viewModel(),
         composable(route = GemAPPScreen.Text.name){
             GemBotScreen(gemViewModel = gemViewModel)
         }
-        composable(route = )
+        composable(route = GemAPPScreen.Image.name){
+            GemBotImageScreen(gemViewModel = gemViewModel)
+        }
     }
 }
