@@ -16,6 +16,7 @@ import com.example.gembot.ui.data.Part
 import com.example.gembot.ui.data.Part1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -56,40 +57,45 @@ class GemViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    var extractedText = mutableStateOf("No response yet")
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    //used to fetch response with the help of Gemini of the Image to Text based
-    fun processImage(bitmap: Bitmap, apiKey: String) {
-        val base64Image = ImageUtils.convertBitmapToBase64(bitmap)
+    fun processImage(bitmap: Bitmap, apiKey: String, userQuery: String) {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                _chatHistory.value += ChatMessage(text = userQuery, isQuestion = true)
 
-        val request = GeminiImageRequest(
-            contents = listOf(
-                Content1(
-                    parts = listOf(
-                        Part1(
-                            inlineData = InlineData(
-                                mimeType = "image/png",
-                                data = base64Image
+                val base64Image = ImageUtils.convertBitmapToBase64(bitmap)
+
+                val request = GeminiImageRequest(
+                    contents = listOf(
+                        Content1(
+                            parts = listOf(
+                                Part1(text = userQuery),
+                                Part1(
+                                    inlineData = InlineData(
+                                        mimeType = "image/jpeg",
+                                        data = base64Image
+                                    )
+                                )
                             )
                         )
                     )
                 )
-            )
-        )
 
-        viewModelScope.launch {
-            try {
                 val response = withContext(Dispatchers.IO) {
                     RetrofitClient1.instance.processImage(apiKey, request)
                 }
 
-                extractedText.value = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
+                val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
                     ?: "No text extracted"
-
+                _chatHistory.value += ChatMessage(text = responseText, isQuestion = false)
             } catch (e: Exception) {
-                extractedText.value = "Error: ${e.message}"
+                _chatHistory.value += ChatMessage(text = "Error: ${e.message}", isQuestion = false)
+            } finally {
+                _isLoading.value = false
             }
         }
     }
-
 }

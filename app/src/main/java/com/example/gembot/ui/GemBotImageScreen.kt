@@ -5,6 +5,7 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,12 +19,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +34,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,6 +62,9 @@ fun GemBotImageScreen(gemViewModel: GemViewModel) {
         }
     }
 
+    val chatHistory by gemViewModel.chatHistory.collectAsState()
+    val isLoading by gemViewModel.isLoading.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -82,62 +89,50 @@ fun GemBotImageScreen(gemViewModel: GemViewModel) {
                 .padding(10.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
+            // Chat History
             Box(
                 modifier = Modifier
-                    .height(400.dp)
-                    .weight(1f) // ✅ Ensures TextField stays at the bottom even when empty
+                    .weight(1f)
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    item {
-                        Text(
-                            text = gemViewModel.extractedText.value,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(8.dp),
-                            textAlign = TextAlign.Center
-                        )
+                    items(chatHistory) { message ->
+                        val alignment = if (message.isQuestion) Alignment.TopEnd else Alignment.TopStart
+                       // val alignment = if (message.isQuestion) Alignment.End else Alignment.Start
+                        val backgroundColor = if (message.isQuestion) Color(0xFFEEDEF6) else Color(0xFFDCF8C6)
+                        val textColor = if (message.isQuestion) Color.Black else Color.Black
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            contentAlignment = alignment
+                        ) {
+                            MarkdownText(
+                                markdown = message.text,
+                                modifier = Modifier
+                                    .background(backgroundColor, shape = RoundedCornerShape(8.dp))
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                            )
+                        }
                     }
                 }
             }
-//            Card(
-//                modifier = Modifier
-//                    .padding(start = 3.dp, end = 3.dp, bottom = 40.dp)
-//                    .fillMaxWidth()
-//                    .height(60.dp)
-//                    .clickable {
-//                        launcher.launch("image/*")
-//                    },
-//                colors = CardDefaults.cardColors(
-//                    containerColor = Color(0xFFCCE5E3)
-//                )
-//            ) {
-//                Row(
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    //  horizontalArrangement = Arrangement.SpaceBetween,
-//                    modifier = Modifier.fillMaxSize()
-//                ) {
-//                    Box(modifier = Modifier
-//                        .weight(3.5f)
-//                        .fillMaxHeight(),
-//                        contentAlignment = Alignment.Center
-//                    ) {
-//                        Text(
-//                            text = "Upload an Image",
-//                            textAlign = TextAlign.Center
-//                        )
-//                    }
-//                    IconButton(
-//                        modifier = Modifier.weight(0.5f),
-//                        onClick = {
-//                            bitmap?.let { gemViewModel.processImage(it, apiKey) }//used to target or call the IMAGETOTEXT response
-//                        },
-//                        enabled = bitmap != null
-//                    ) {
-//                        Icon(imageVector = Icons.Default.Send, contentDescription = " ")
-//                    }
-//                }
-//            }
+
+            // Loading Indicator
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            // Input Field
             OutlinedTextField(
                 value = userInput,
                 onValueChange = { userInput = it },
@@ -165,17 +160,17 @@ fun GemBotImageScreen(gemViewModel: GemViewModel) {
                     }
                 },
                 trailingIcon = {
-                    IconButton(onClick = {
-                        bitmap?.let { gemViewModel.processImage(it, apiKey) }
-                        userInput = TextFieldValue("") // Clear the input field
-                    },enabled = bitmap!=null) {
+                    IconButton(
+                        onClick = {
+                            bitmap?.let { gemViewModel.processImage(it, apiKey, userInput.text) }
+                            userInput = TextFieldValue("") // Clear the input field
+                        },
+                        enabled = bitmap != null && !isLoading // Disable button if no image is selected or while loading
+                    ) {
                         Icon(imageVector = Icons.Default.Send, contentDescription = "Send")
                     }
                 }
             )
         }
-
     }
-    Spacer(modifier = Modifier.height(16.dp))
 }
-

@@ -11,7 +11,8 @@ data class Content1(
 )
 
 data class Part1(
-    @SerializedName("inlineData") val inlineData: InlineData
+    @SerializedName("text") val text: String? = null,
+    @SerializedName("inlineData") val inlineData: InlineData? = null
 )
 
 data class InlineData(
