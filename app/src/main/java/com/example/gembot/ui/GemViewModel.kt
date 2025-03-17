@@ -2,7 +2,6 @@ package com.example.gembot.ui
 
 import android.app.Application
 import android.graphics.Bitmap
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gembot.BuildConfig
@@ -20,8 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.util.Properties
+
 
 class GemViewModel(application: Application): AndroidViewModel(application) {
 
