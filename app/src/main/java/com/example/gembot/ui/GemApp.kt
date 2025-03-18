@@ -14,15 +14,16 @@ enum class GemAPPScreen {
 @Composable
 fun GemApp(gemViewModel: GemViewModel= viewModel(),
            navHostController: NavHostController= rememberNavController()){
-    NavHost(navController = navHostController, startDestination = GemAPPScreen.Home.name) {
-        composable(route = GemAPPScreen.Home.name){
-            HomeScreen(navHostController)
-        }
-        composable(route = GemAPPScreen.Text.name){
-            GemBotScreen(gemViewModel = gemViewModel)
-        }
-        composable(route = GemAPPScreen.Image.name){
-            GemBotImageScreen(gemViewModel = gemViewModel)
-        }
-    }
+    LoginScreen()
+//    NavHost(navController = navHostController, startDestination = GemAPPScreen.Home.name) {
+//        composable(route = GemAPPScreen.Home.name){
+//            HomeScreen(navHostController)
+//        }
+//        composable(route = GemAPPScreen.Text.name){
+//            GemBotScreen(gemViewModel = gemViewModel)
+//        }
+//        composable(route = GemAPPScreen.Image.name){
+//            GemBotImageScreen(gemViewModel = gemViewModel)
+//        }
+//    }
 }
