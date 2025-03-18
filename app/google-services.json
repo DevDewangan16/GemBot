@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1038461050040",
+    "project_id": "fcm-messaging-9c5f2",
+    "storage_bucket": "fcm-messaging-9c5f2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038461050040:android:ba0955dec489008440684d",
+        "android_client_info": {
+          "package_name": "com.example.gembot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYXmvs2QS5P5q4ma-SIIA75rjmtDTt7J8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
