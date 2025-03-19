@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GemBot"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="my_default_channel" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

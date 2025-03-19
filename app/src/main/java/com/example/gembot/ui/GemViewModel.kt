@@ -1,10 +1,15 @@
 package com.example.gembot.ui
 
+import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gembot.BuildConfig
+import com.example.gembot.R
 import com.example.gembot.ui.data.ChatMessage
 import com.example.gembot.ui.data.Content
 import com.example.gembot.ui.data.Content1
@@ -14,11 +19,18 @@ import com.example.gembot.ui.data.ImageMessage
 import com.example.gembot.ui.data.InlineData
 import com.example.gembot.ui.data.Part
 import com.example.gembot.ui.data.Part1
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
@@ -100,4 +112,5 @@ class GemViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
+
 }
