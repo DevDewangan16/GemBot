@@ -1,5 +1,4 @@
 package com.example.gembot.ui
-
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,9 +30,11 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import com.example.gembot.R
 
+
 @Composable
-fun LoginScreen(navHostController: NavHostController){
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
+fun LoginScreen(navHostController: NavHostController) {
+    val context= LocalContext.current
+    val imageLoader = ImageLoader.Builder(context)
         .components {
             if (SDK_INT >= 28) {
                 add(ImageDecoderDecoder.Factory())
@@ -42,6 +43,7 @@ fun LoginScreen(navHostController: NavHostController){
             }
         }
         .build()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,56 +54,67 @@ fun LoginScreen(navHostController: NavHostController){
         Image(
             painter = rememberAsyncImagePainter(R.drawable.login1, imageLoader),
             contentDescription = null,
-            modifier = androidx.compose.ui.Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(480.dp),
             contentScale = ContentScale.Crop
         )
-        Card(modifier = Modifier.fillMaxSize(),
+        Card(
+            modifier = Modifier.fillMaxSize(),
             shape = RoundedCornerShape(topEnd = 25.dp, topStart = 25.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
             )
         ) {
-            Spacer(modifier =Modifier
-                .fillMaxWidth()
-                .height(20.dp))
-            Text(text = "Welcome to GemBot",
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp)
+            )
+            Text(
+                text = "Welcome to GemBot",
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, bottom = 8.dp))
-            Text(text = "Access your personal AI assistant that combines the power of text and visual understanding to help you accomplish more.",
+                    .padding(start = 10.dp, end = 10.dp, bottom = 8.dp)
+            )
+            Text(
+                text = "Access your personal AI assistant that combines the power of text and visual understanding to help you accomplish more.",
                 fontSize = 18.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp))
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(10.dp))
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .padding(start = 20.dp, end = 20.dp)
-                .clickable {
-                    navHostController.navigate(GemAPPScreen.Home.name)
-                },
+                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+            )
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .padding(start = 20.dp, end = 20.dp)
+                    .clickable {
+                        navHostController.navigate(GemAPPScreen.Home.name)
+                    },
                 colors = CardDefaults.cardColors(
                     containerColor = Color.Black
                 )
-            ){
+            ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Continue with Google",
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Continue with Google",
                         fontSize = 18.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold)
                 }
             }
         }
-
     }
 }
