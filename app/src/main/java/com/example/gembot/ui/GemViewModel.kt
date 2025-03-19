@@ -10,6 +10,7 @@ import com.example.gembot.ui.data.Content
 import com.example.gembot.ui.data.Content1
 import com.example.gembot.ui.data.GeminiImageRequest
 import com.example.gembot.ui.data.GeminiRequest
+import com.example.gembot.ui.data.ImageMessage
 import com.example.gembot.ui.data.InlineData
 import com.example.gembot.ui.data.Part
 import com.example.gembot.ui.data.Part1
@@ -27,6 +28,9 @@ class GemViewModel(application: Application): AndroidViewModel(application) {
 
     private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
     val chatHistory = _chatHistory.asStateFlow()
+
+    private val _imageHistory=MutableStateFlow<List<ImageMessage>>(emptyList())
+    val imageHistory=_imageHistory.asStateFlow()
 
     fun fetchResponse(prompt: String) {
         viewModelScope.launch {
@@ -62,7 +66,7 @@ class GemViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
-                _chatHistory.value += ChatMessage(text = userQuery, isQuestion = true)
+                _imageHistory.value += ImageMessage(text = userQuery, isQuestion = true)
 
                 val base64Image = ImageUtils.convertBitmapToBase64(bitmap)
 
@@ -88,9 +92,9 @@ class GemViewModel(application: Application): AndroidViewModel(application) {
 
                 val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
                     ?: "No text extracted"
-                _chatHistory.value += ChatMessage(text = responseText, isQuestion = false)
+                _imageHistory.value += ImageMessage(text = responseText, isQuestion = false)
             } catch (e: Exception) {
-                _chatHistory.value += ChatMessage(text = "Error: ${e.message}", isQuestion = false)
+                _imageHistory.value += ImageMessage(text = "Error: ${e.message}", isQuestion = false)
             } finally {
                 _isLoading.value = false
             }

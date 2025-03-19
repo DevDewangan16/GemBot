@@ -34,3 +34,8 @@ data class ContentResponse(
 data class TextPart(
     @SerializedName("text") val text: String
 )
+
+data class ImageMessage(
+    val text: String,
+    val isQuestion: Boolean
+)

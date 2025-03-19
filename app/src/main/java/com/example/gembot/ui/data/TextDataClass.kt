@@ -26,3 +26,4 @@ data class ChatMessage(
     val text: String,
     val isQuestion: Boolean
 )
+

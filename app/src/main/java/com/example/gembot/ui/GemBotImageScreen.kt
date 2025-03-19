@@ -55,7 +55,7 @@ fun GemBotImageScreen(gemViewModel: GemViewModel) {
         }
     }
 
-    val chatHistory by gemViewModel.chatHistory.collectAsState()
+    val imageHistory by gemViewModel.imageHistory.collectAsState()
     val isLoading by gemViewModel.isLoading.collectAsState()
 
     Column(
@@ -90,7 +90,7 @@ fun GemBotImageScreen(gemViewModel: GemViewModel) {
                     .padding(8.dp)
             ) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(chatHistory) { message ->
+                    items(imageHistory) { message ->
                         val alignment = if (message.isQuestion) Alignment.TopEnd else Alignment.TopStart
                        // val alignment = if (message.isQuestion) Alignment.End else Alignment.Start
                         val backgroundColor = if (message.isQuestion) Color(0xFFEEDEF6) else Color(0xFFDCF8C6)
